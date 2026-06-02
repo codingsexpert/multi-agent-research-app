@@ -172,58 +172,38 @@ export default function Page() {
         </div>
       </header>
 
-      <main className="relative mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-16">
+      <main className="relative mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-20">
         {/* Hero / input */}
         {state.status === "idle" && (
-          <section className="mb-16 md:mb-20">
+          <section className="mb-16 md:mb-24">
             <div className="mx-auto max-w-4xl">
               {/* Badge */}
-              <div className="mb-6 flex justify-center">
-                <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary backdrop-blur-sm">
+              <div className="mb-8 flex justify-center">
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-gradient-to-r from-primary/10 to-accent/10 px-4 py-2 text-xs font-semibold text-primary backdrop-blur-sm">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                  Five agents · Real-time insights · Web search
+                  Five parallel agents
+                  <span className="mx-1 text-primary/40">·</span>
+                  Real-time insights
+                  <span className="mx-1 text-primary/40">·</span>
+                  Web search
                 </div>
               </div>
 
-              {/* Hero text */}
-              <h1 className="text-center font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight">
-                <span className="font-bold">Research</span>
-                <br />
-                <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                  Amplified
+              {/* Hero heading */}
+              <h1 className="text-center font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
+                <span className="block">Turn any question</span>
+                <span className="block bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                  into research
                 </span>
               </h1>
+              
               <p className="mt-6 text-center text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                Orchestrate five specialized AI agents in parallel to search, analyze, fact-check, and synthesize
-                information into structured research documents with full source attribution.
+                Lumen orchestrates five specialized AI agents to search, analyze, fact-check, and synthesize information into structured research documents with full source attribution.
               </p>
 
               {/* Input */}
               <div className="mx-auto mt-12 max-w-3xl">
                 <ResearchInput onSubmit={handleSubmit} />
-              </div>
-
-              {/* Example queries */}
-              <div className="mt-8 flex flex-col items-center gap-3">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Popular queries</span>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {[
-                    "Future of quantum computing",
-                    "AI ethics frameworks",
-                    "Climate tech innovations",
-                  ].map((q) => (
-                    <button
-                      key={q}
-                      onClick={() => {
-                        const textarea = document.querySelector("textarea")
-                        if (textarea) textarea.value = q
-                      }}
-                      className="rounded-lg border border-border/40 bg-card/40 px-4 py-2 text-xs font-medium text-foreground transition hover:border-primary/60 hover:bg-primary/5 hover:text-primary"
-                    >
-                      {q}
-                    </button>
-                  ))}
-                </div>
               </div>
             </div>
           </section>

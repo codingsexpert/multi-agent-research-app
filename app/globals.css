@@ -139,10 +139,21 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Better input and textarea focus states */
+  input:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible,
+  select:focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
   }
 }
 
@@ -152,6 +163,21 @@
     linear-gradient(to right, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px),
     linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+/* Gradient animation for hero text */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
 }
 
 /* Pulsing dot animation for active agents */

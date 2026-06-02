@@ -55,68 +55,73 @@ export function ApiKeyModal({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md gap-6">
-        <DialogHeader>
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Key className="h-5 w-5" />
+      <DialogContent className="max-w-md gap-6 border-border">
+        <DialogHeader className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-white shadow-lg">
+              <Key className="h-6 w-6" />
             </div>
-            <div>
-              <DialogTitle>API Configuration</DialogTitle>
-              <DialogDescription>Manage your API key for research operations</DialogDescription>
+            <div className="space-y-1">
+              <DialogTitle className="text-lg font-semibold">API Configuration</DialogTitle>
+              <DialogDescription className="text-xs">Manage your API key securely</DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           {/* API Key Input */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">API Key</label>
-            <div className="relative">
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-foreground">API Key</label>
+            <div className="relative group">
               <Input
                 type={showKey ? "text" : "password"}
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="Paste your API key here..."
-                className="pr-12"
+                className="pr-12 font-mono text-sm border-border focus-visible:ring-2 focus-visible:ring-primary"
               />
               <button
                 type="button"
                 onClick={() => setShowKey(!showKey)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={showKey ? "Hide API key" : "Show API key"}
               >
                 {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Your API key is stored locally in your browser and never shared with our servers.
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Your API key is stored securely in your browser&apos;s localStorage and never transmitted to our servers.
             </p>
           </div>
 
           {/* Status Badge */}
           {isSaved && (
-            <div className="rounded-lg border border-green-500/30 bg-green-500/5 p-3">
-              <p className="flex items-center gap-2 text-sm text-green-700 dark:text-green-400">
-                <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-                API key configured and ready to use
+            <div className="rounded-lg border border-green-500/30 bg-gradient-to-r from-green-500/5 to-transparent p-3.5 animate-in fade-in">
+              <p className="flex items-center gap-2.5 text-sm font-medium text-green-700 dark:text-green-400">
+                <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse" />
+                API key configured and ready
               </p>
             </div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-2 pt-2">
-            <Button onClick={handleSave} className="flex-1 gap-2" disabled={!apiKey.trim()}>
+          <div className="space-y-2 pt-2">
+            <Button 
+              onClick={handleSave} 
+              disabled={!apiKey.trim()} 
+              className="w-full gap-2 font-semibold"
+            >
               {isSaved ? "Update" : "Save"} API Key
             </Button>
             {apiKey && (
               <Button
                 type="button"
                 variant="outline"
-                size="icon"
                 onClick={handleCopy}
-                title="Copy to clipboard"
+                className="w-full gap-2"
               >
                 <Copy className="h-4 w-4" />
+                Copy to Clipboard
               </Button>
             )}
           </div>
@@ -126,7 +131,7 @@ export function ApiKeyModal({ open, onOpenChange }: Props) {
             <Button
               type="button"
               variant="ghost"
-              className="w-full gap-2 text-destructive hover:bg-destructive/5 hover:text-destructive"
+              className="w-full gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
               onClick={handleClear}
             >
               <X className="h-4 w-4" />

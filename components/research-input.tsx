@@ -33,85 +33,100 @@ export function ResearchInput({ onSubmit, disabled }: Props) {
 
   return (
     <div className="relative">
-      <div className="relative rounded-2xl border border-border bg-card/60 p-4 shadow-sm backdrop-blur-sm transition focus-within:border-primary/60 focus-within:shadow-lg focus-within:shadow-primary/5">
-        <div className="flex items-start gap-3">
-          <div className="mt-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <Sparkles className="h-4 w-4" />
-          </div>
-          <Textarea
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault()
-                submit()
-              }
-            }}
-            placeholder="What would you like to research? e.g. 'How is AI transforming drug discovery?'"
-            className="min-h-[72px] resize-none border-0 bg-transparent p-0 text-base shadow-none focus-visible:ring-0 md:text-lg"
-            disabled={disabled}
-          />
-        </div>
-
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <Select value={template} onValueChange={(v) => setTemplate(v as ResearchTemplate)} disabled={disabled}>
-              <SelectTrigger className="h-9 w-auto gap-2 bg-transparent">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {TEMPLATES.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>
-                    <div className="flex flex-col">
-                      <span>{t.label}</span>
-                      <span className="text-xs text-muted-foreground">{t.hint}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <div className="flex h-9 items-center overflow-hidden rounded-md border border-border bg-background">
-              {(Object.keys(DEPTH_CONFIG) as ResearchDepth[]).map((d) => (
-                <button
-                  key={d}
-                  type="button"
-                  onClick={() => setDepth(d)}
-                  disabled={disabled}
-                  className={cn(
-                    "h-full px-3 text-xs font-medium transition",
-                    depth === d
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                  )}
-                  title={DEPTH_CONFIG[d].hint}
-                >
-                  {DEPTH_CONFIG[d].label}
-                </button>
-              ))}
+      <div className="group relative overflow-hidden rounded-2xl border border-border bg-card/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow duration-300">
+        {/* Background gradient on hover */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <div className="relative p-5">
+          <div className="flex items-start gap-4">
+            <div className="mt-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-white shadow-lg">
+              <Sparkles className="h-5 w-5" />
             </div>
+            <Textarea
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault()
+                  submit()
+                }
+              }}
+              placeholder="What would you like to research? e.g. 'How is AI transforming drug discovery?'"
+              className="min-h-[80px] resize-none border-0 bg-transparent p-0 text-base shadow-none placeholder:text-muted-foreground/60 focus-visible:ring-0 md:text-lg"
+              disabled={disabled}
+            />
           </div>
 
-          <Button onClick={submit} disabled={disabled || !topic.trim()} className="gap-2">
-            Research
-            <ArrowRight className="h-4 w-4" />
-          </Button>
+          {/* Divider */}
+          <div className="my-4 h-px bg-gradient-to-r from-border via-border/40 to-transparent" />
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <Select value={template} onValueChange={(v) => setTemplate(v as ResearchTemplate)} disabled={disabled}>
+                <SelectTrigger className="h-10 w-auto gap-2 bg-background/60 hover:bg-background border-border transition">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {TEMPLATES.map((t) => (
+                    <SelectItem key={t.value} value={t.value}>
+                      <div className="flex flex-col">
+                        <span className="font-medium">{t.label}</span>
+                        <span className="text-xs text-muted-foreground">{t.hint}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <div className="flex h-10 items-center overflow-hidden rounded-lg border border-border bg-background/60">
+                {(Object.keys(DEPTH_CONFIG) as ResearchDepth[]).map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setDepth(d)}
+                    disabled={disabled}
+                    className={cn(
+                      "h-full px-3 text-xs font-semibold transition-all duration-200",
+                      depth === d
+                        ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-md"
+                        : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+                    )}
+                    title={DEPTH_CONFIG[d].hint}
+                  >
+                    {DEPTH_CONFIG[d].label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <Button 
+              onClick={submit} 
+              disabled={disabled || !topic.trim()} 
+              className="gap-2 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              Research
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-2">
-        <span className="text-xs text-muted-foreground">Try:</span>
-        {SUGGESTIONS.map((s) => (
-          <button
-            key={s}
-            type="button"
-            onClick={() => setTopic(s)}
-            disabled={disabled}
-            className="rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
-          >
-            {s}
-          </button>
-        ))}
+      {/* Suggestions */}
+      <div className="mt-4 space-y-2">
+        <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wide">Popular queries</span>
+        <div className="flex flex-wrap gap-2">
+          {SUGGESTIONS.map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setTopic(s)}
+              disabled={disabled}
+              className="rounded-full border border-border/50 bg-card/30 hover:bg-card/60 px-4 py-2 text-xs text-muted-foreground hover:text-foreground transition-all duration-200 hover:border-primary/40"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
