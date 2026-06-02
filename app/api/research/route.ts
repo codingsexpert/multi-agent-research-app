@@ -1,5 +1,5 @@
 import { generateText, Output } from "ai"
-import { google } from "@ai-sdk/google"
+import { createGoogleGenerativeAI } from "@ai-sdk/google"
 import {
   SourcesOutputSchema,
   SummariesOutputSchema,
@@ -14,8 +14,11 @@ import {
 
 export const maxDuration = 60
 
-// Using Google Gemini free tier models
-const getGoogleModel = (apiKey: string) => google("gemini-2.5-flash", { apiKey })
+// Using Google Gemini free tier models - create instance with API key
+const getGoogleModel = (apiKey: string) => {
+  const googleAI = createGoogleGenerativeAI({ apiKey })
+  return googleAI("gemini-2.5-flash")
+}
 
 interface Body {
   topic: string
@@ -198,7 +201,6 @@ export async function POST(req: Request) {
 
         send({ type: "complete" })
       } catch (err) {
-        console.error("[v0] research error:", err)
         send({
           type: "error",
           message: err instanceof Error ? err.message : "Unknown error during research.",

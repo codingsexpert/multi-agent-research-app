@@ -1,5 +1,5 @@
 import { convertToModelMessages, streamText, type UIMessage } from "ai"
-import { google } from "@ai-sdk/google"
+import { createGoogleGenerativeAI } from "@ai-sdk/google"
 import type { ResearchDocument } from "@/lib/research-types"
 
 export const maxDuration = 30
@@ -9,7 +9,10 @@ interface Body {
   document: ResearchDocument
 }
 
-const getGoogleModel = (apiKey: string) => google("gemini-2.5-flash", { apiKey })
+const getGoogleModel = (apiKey: string) => {
+  const googleAI = createGoogleGenerativeAI({ apiKey })
+  return googleAI("gemini-2.5-flash")
+}
 
 export async function POST(req: Request) {
   const { messages, document } = (await req.json()) as Body
