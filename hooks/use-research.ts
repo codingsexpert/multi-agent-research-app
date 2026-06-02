@@ -154,6 +154,7 @@ export function useResearch() {
       try {
         // Get API key from localStorage
         const apiKey = typeof window !== "undefined" ? localStorage.getItem("lumen_api_key") : null
+        
         if (!apiKey) {
           throw new Error("API key not configured. Please add your API key in settings.")
         }
