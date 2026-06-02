@@ -152,10 +152,19 @@ export function useResearch() {
       })
 
       try {
+        // Get API key from localStorage
+        const apiKey = typeof window !== "undefined" ? localStorage.getItem("lumen_api_key") : null
+        if (!apiKey) {
+          throw new Error("API key not configured. Please add your API key in settings.")
+        }
+
         const res = await fetch("/api/research", {
           method: "POST",
           signal: controller.signal,
-          headers: { "content-type": "application/json" },
+          headers: { 
+            "content-type": "application/json",
+            "x-api-key": apiKey,
+          },
           body: JSON.stringify(opts),
         })
         if (!res.ok) throw new Error(`Request failed: ${res.status}`)

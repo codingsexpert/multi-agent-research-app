@@ -19,9 +19,13 @@ export function ResearchChat({ document, onSelectQuestion }: Props) {
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
-      prepareSendMessagesRequest: ({ messages }) => ({
-        body: { messages, document },
-      }),
+      prepareSendMessagesRequest: ({ messages }) => {
+        const apiKey = typeof window !== "undefined" ? localStorage.getItem("lumen_api_key") : null
+        return {
+          body: { messages, document },
+          headers: apiKey ? { "x-api-key": apiKey } : {},
+        }
+      },
     }),
   })
 

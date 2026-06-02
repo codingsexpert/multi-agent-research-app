@@ -15,8 +15,7 @@ import {
 export const maxDuration = 60
 
 // Using Google Gemini free tier models
-const FAST_MODEL = google("gemini-2.5-flash")
-const SMART_MODEL = google("gemini-2.5-flash")
+const getGoogleModel = (apiKey: string) => google("gemini-2.5-flash", { apiKey })
 
 interface Body {
   topic: string
@@ -52,10 +51,18 @@ function templateHint(t: ResearchTemplate): string {
 export async function POST(req: Request) {
   const body = (await req.json()) as Body
   const { topic, depth, template } = body
+  const apiKey = req.headers.get("x-api-key")
 
   if (!topic || typeof topic !== "string") {
     return new Response("Missing topic", { status: 400 })
   }
+
+  if (!apiKey) {
+    return new Response("Missing API key. Please configure your API key in settings.", { status: 401 })
+  }
+
+  const FAST_MODEL = getGoogleModel(apiKey)
+  const SMART_MODEL = getGoogleModel(apiKey)
 
   const enc = encoder()
   const stream = new ReadableStream<Uint8Array>({

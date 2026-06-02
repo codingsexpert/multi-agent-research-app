@@ -9,11 +9,18 @@ interface Body {
   document: ResearchDocument
 }
 
+const getGoogleModel = (apiKey: string) => google("gemini-2.5-flash", { apiKey })
+
 export async function POST(req: Request) {
   const { messages, document } = (await req.json()) as Body
+  const apiKey = req.headers.get("x-api-key")
 
   if (!document) {
     return new Response("Missing document context", { status: 400 })
+  }
+
+  if (!apiKey) {
+    return new Response("Missing API key. Please configure your API key in settings.", { status: 401 })
   }
 
   const context = `You are Lumen, an AI research assistant. The user has just generated the following research document. Answer follow-up questions accurately and concisely, citing source IDs like [s1], [s2] when relevant. If the answer is not in the document, say so and offer to start a new deeper research.
@@ -52,7 +59,7 @@ ${
 === END DOCUMENT ===`
 
   const result = streamText({
-    model: google("gemini-2.5-flash"),
+    model: getGoogleModel(apiKey),
     system: context,
     messages: await convertToModelMessages(messages),
   })
